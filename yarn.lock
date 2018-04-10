@@ -2366,6 +2366,10 @@ image-size@^0.6.0:
   version "0.6.2"
   resolved "http://registry.npm.taobao.org/image-size/download/image-size-0.6.2.tgz#8ee316d4298b028b965091b673d5f1537adee5b4"
 
+immer@^1.2.1:
+  version "1.2.1"
+  resolved "http://registry.npm.taobao.org/immer/download/immer-1.2.1.tgz#96e2ae29cdfc428f28120b832701931b92fa597c"
+
 imurmurhash@^0.1.4:
   version "0.1.4"
   resolved "http://registry.npm.taobao.org/imurmurhash/download/imurmurhash-0.1.4.tgz#9218b9b2b928a238b13dc4fb6b6d576f231453ea"
