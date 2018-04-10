@@ -2,9 +2,6 @@ import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 
 export default class Profile extends React.Component {
-  static propTypes = {
-    name: React.PropTypes.string.isRequired,
-  }
 
   state = {
     color: 'green'
