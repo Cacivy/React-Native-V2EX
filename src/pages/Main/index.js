@@ -5,44 +5,38 @@ import { apis, appConfig, colors } from "../../config";
 import request from "../../api";
 import produce from "immer";
 import Card from "./Card";
-const { appname, tabMenu, defaultIndex } = appConfig;
+import { get, save, mergeData } from "../../store";
+const { tabMenu, defaultIndex } = appConfig;
 
 export default class MainScreen extends React.Component {
-  static navigationOptions = {
-    title: appname,
-    headerStyle: {
-      backgroundColor: colors.primaryBg,
-      elevation: 0,
-      // shadowColor: 'transparent',
-      // shadowRadius: 0,
-      shadowOffset: {
-        height: 0
-      },
-      borderBottomWidth: 0
-    },
-    headerTitleStyle: {
-      color: "#fff"
-    }
-  };
 
   activeIndex = defaultIndex
+
+  get activeKey() {
+    return this.state.tabMenu[this.activeIndex].key;
+  }
 
   state = {
     tabMenu
   };
 
   fetch = (key) => {
-    key = key || this.state.tabMenu[this.activeIndex].key;
+    key = key || this.activeKey
     request(apis[key]).then(data => {
       let tabMenu = produce(this.state.tabMenu, draft => {
-        draft.find(item => item.key === key).data = data;
+        let item = draft.find(item => item.key === key)
+        item.data = mergeData(item.data, data)
       });
       this.setState({ tabMenu });
+      save(key, tabMenu)
     });
   };
 
   componentDidMount() {
     this.fetch();
+    get(this.activeKey).then(data => {
+      this.setState(tabMenu, mergeData(data, this.state.tabMenu[this.activeKey].data))
+    })
   }
 
   onChangeTab = ({ i }) => {
