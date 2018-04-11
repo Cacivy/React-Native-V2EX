@@ -60,7 +60,7 @@ const TimeText = styled.Text`
 
 const IConText = styled.Text`
   color: #fff;
-  background-color: #e5e5e5;
+  background-color: #aab0c6;
   font-weight: 700;
   border-radius: 12;
   padding-left: 12;
