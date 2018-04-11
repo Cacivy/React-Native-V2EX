@@ -16,7 +16,7 @@ export default class MainScreen extends React.Component {
       // shadowColor: 'transparent',
       // shadowRadius: 0,
       shadowOffset: {
-          height: 0,
+        height: 0
       },
       borderBottomWidth: 0
     },
@@ -54,8 +54,12 @@ export default class MainScreen extends React.Component {
 
   render() {
     const scrollViewProps = {
+      tabBarPosition: "top",
       tabBarUnderlineStyle: {
         backgroundColor: colors.primaryText
+      },
+      tabBarTextStyle: {
+        // padding: 5
       },
       tabBarBackgroundColor: colors.primaryBg,
       tabBarActiveTextColor: colors.primaryText,
@@ -90,7 +94,7 @@ export default class MainScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 0
+    paddingTop: 0,
   },
   tabView: {
     flex: 1,
