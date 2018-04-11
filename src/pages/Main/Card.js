@@ -4,20 +4,21 @@ import styled from "styled-components";
 import timeago from "timeago.js";
 
 export const ContainerView = styled.View`
-  border-width: ${props => props.isMain ? 1 : 0};
+  border-width: ${props => (props.showBorder ? 1 : 0)};
   background-color: #fff;
   border-color: "rgba(0,0,0,0.1)";
+  height: auto;
   /* margin: 5px; */
   padding: 15px;
-  shadow-color: #ccc;
+  /* shadow-color: #ccc;
   shadow-offset: { width: 2, height: 2 };
   shadow-opacity: 0.5;
-  shadow-radius: 3;
+  shadow-radius: 3; */
 `;
 
 const headerHeight = 40;
 
-const HeaderView = styled.View`
+export const HeaderView = styled.View`
   height: ${headerHeight};
   flex: 1;
   flex-direction: row;
@@ -69,24 +70,41 @@ const IConText = styled.Text`
   padding-bottom: 2;
 `;
 
+const TitleView = styled.View`
+  flex: 1;
+`
+
 const TitleText = styled.Text`
   font-size: 16;
   font-weight: bold;
 `;
 
-const Card = ({ title, content, node, member, replies, created, onPress }) => {
+export const Member = ({ member, node, created }) => (
+  <MemberView>
+    <AvatarImage source={{ uri: "https:" + member.avatar_normal }} />
+    <ColView>
+      <Text>
+        <NameText>{member.username}</NameText>
+        {node && <NodeTitleText>&nbsp;{node.title}</NodeTitleText>}
+      </Text>
+      <TimeText>{timeago(null, "zh_CN").format(created * 1000)}</TimeText>
+    </ColView>
+  </MemberView>
+);
+
+const Card = ({
+  title,
+  content,
+  node,
+  member,
+  replies,
+  created,
+  onPress,
+  showBorder = true
+}) => {
   const Header = (
     <HeaderView>
-      <MemberView>
-        <AvatarImage source={{ uri: "https:" + member.avatar_normal }} />
-        <ColView>
-          <Text>
-            <NameText>{member.username}</NameText>
-            <NodeTitleText>&nbsp;{node.title}</NodeTitleText>
-          </Text>
-          <TimeText>{timeago(null, "zh_CN").format(created * 1000)}</TimeText>
-        </ColView>
-      </MemberView>
+      <Member member={member} node={node} created={created} />
       {replies > 0 && (
         <View>
           <IConText>{replies}</IConText>
@@ -96,9 +114,11 @@ const Card = ({ title, content, node, member, replies, created, onPress }) => {
   );
   return (
     <TouchableHighlight onPress={onPress}>
-      <ContainerView isMain={!!onPress}>
+      <ContainerView showBorder={showBorder}>
         {Header}
-        <TitleText>{title}</TitleText>
+        <TitleView>
+          <TitleText>{title}</TitleText>
+        </TitleView>
       </ContainerView>
     </TouchableHighlight>
   );

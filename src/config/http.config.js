@@ -5,7 +5,8 @@ const apis = {
   hot: '/api/topics/hot.json',
   tech: '/api/topics/show.json?node_name=tech',
   jobs: '/api/topics/show.json?node_name=jobs',
-  ideas: '/api/topics/show.json?node_name=ideas'
+  ideas: '/api/topics/show.json?node_name=ideas',
+  replies: '/api/replies/show.json?topic_id='
 }
 
 Object.keys(apis).forEach(key => {
