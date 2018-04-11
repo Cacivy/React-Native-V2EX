@@ -1,13 +1,13 @@
 import React from "react";
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, TouchableHighlight } from "react-native";
 import styled from "styled-components";
 import timeago from "timeago.js";
 
-const ContainerView = styled.View`
-  border-width: 1;
+export const ContainerView = styled.View`
+  border-width: ${props => props.isMain ? 1 : 0};
   background-color: #fff;
   border-color: "rgba(0,0,0,0.1)";
-  margin: 5px;
+  /* margin: 5px; */
   padding: 15px;
   shadow-color: #ccc;
   shadow-offset: { width: 2, height: 2 };
@@ -74,8 +74,8 @@ const TitleText = styled.Text`
   font-weight: bold;
 `;
 
-const Card = ({ title, content, node, member, replies, created }) => (
-  <ContainerView>
+const Card = ({ title, content, node, member, replies, created, onPress }) => {
+  const Header = (
     <HeaderView>
       <MemberView>
         <AvatarImage source={{ uri: "https:" + member.avatar_normal }} />
@@ -87,10 +87,21 @@ const Card = ({ title, content, node, member, replies, created }) => (
           <TimeText>{timeago(null, "zh_CN").format(created * 1000)}</TimeText>
         </ColView>
       </MemberView>
-      {replies > 0 && <View><IConText>{replies}</IConText></View>}
+      {replies > 0 && (
+        <View>
+          <IConText>{replies}</IConText>
+        </View>
+      )}
     </HeaderView>
-    <TitleText>{title}</TitleText>
-  </ContainerView>
-);
+  );
+  return (
+    <TouchableHighlight onPress={onPress}>
+      <ContainerView isMain={!!onPress}>
+        {Header}
+        <TitleText>{title}</TitleText>
+      </ContainerView>
+    </TouchableHighlight>
+  );
+};
 
 export default Card;

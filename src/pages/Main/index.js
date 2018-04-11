@@ -9,7 +9,11 @@ const {appname, tabMenu, defaultKey} = appConfig
 
 export default class MainScreen extends React.Component {
   static navigationOptions = {
-    title: appname
+    title: appname,
+    headerStyle: {
+      backgroundColor: '#ececec',
+    },
+
   };
 
   state = {
@@ -35,8 +39,12 @@ export default class MainScreen extends React.Component {
     this.fetch(key)
   }
 
-  render() {
+  onPressCard = (item) => {
     const { navigate } = this.props.navigation;
+    navigate('Detail', { item });
+  }
+
+  render() {
     return (
       <ScrollableTabView style={styles.container} initialPage={1} onChangeTab={this.onChangeTab}>
         {this.state.tabMenu.map(tab => (
@@ -45,7 +53,7 @@ export default class MainScreen extends React.Component {
             tabLabel={tab.label}
             style={styles.tabView}
           >
-            {tab.data.map(item => <Card key={item.id} {...item} />)}
+            {tab.data.map(item => <Card key={item.id} {...item} onPress={this.onPressCard.bind(null, item)} />)}
           </ScrollView>
         ))}
       </ScrollableTabView>
@@ -55,7 +63,7 @@ export default class MainScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 10
+    paddingTop: 10
   },
   tabView: {
     flex: 1,
