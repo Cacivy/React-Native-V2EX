@@ -87,7 +87,7 @@ const Card = ({ title, content, node, member, replies, created }) => (
           <TimeText>{timeago(null, "zh_CN").format(created * 1000)}</TimeText>
         </ColView>
       </MemberView>
-      {replies > 0 && <IConText>{replies}</IConText>}
+      {replies > 0 && <View><IConText>{replies}</IConText></View>}
     </HeaderView>
     <TitleText>{title}</TitleText>
   </ContainerView>
