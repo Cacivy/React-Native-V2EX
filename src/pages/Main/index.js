@@ -5,7 +5,7 @@ import { apis, appConfig, colors } from "../../config";
 import request from "../../api";
 import produce from "immer";
 import Card from "./Card";
-const { appname, tabMenu, defaultKey } = appConfig;
+const { appname, tabMenu, defaultIndex } = appConfig;
 
 export default class MainScreen extends React.Component {
   static navigationOptions = {
@@ -25,11 +25,14 @@ export default class MainScreen extends React.Component {
     }
   };
 
+  activeIndex = defaultIndex
+
   state = {
     tabMenu
   };
 
-  fetch = key => {
+  fetch = (key) => {
+    key = key || this.state.tabMenu[this.activeIndex].key;
     request(apis[key]).then(data => {
       let tabMenu = produce(this.state.tabMenu, draft => {
         draft.find(item => item.key === key).data = data;
@@ -39,12 +42,12 @@ export default class MainScreen extends React.Component {
   };
 
   componentDidMount() {
-    this.fetch(defaultKey);
+    this.fetch();
   }
 
   onChangeTab = ({ i }) => {
-    let key = tabMenu[i].key;
-    this.fetch(key);
+    this.activeIndex = i
+    this.fetch();
   };
 
   onPressCard = item => {
@@ -69,7 +72,7 @@ export default class MainScreen extends React.Component {
       <ScrollableTabView
         {...scrollViewProps}
         style={styles.container}
-        initialPage={1}
+        initialPage={this.activeIndex}
         onChangeTab={this.onChangeTab}
       >
         {this.state.tabMenu.map(tab => (

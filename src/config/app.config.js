@@ -1,6 +1,6 @@
 export default {
   appname: 'V2EX',
-  defaultKey: 'all',
+  defaultIndex: 1,
   tabMenu: [
     {
       label: "最热",
