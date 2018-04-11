@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, StyleSheet } from "react-native";
+import { ScrollView, View, StyleSheet, RefreshControl } from "react-native";
 import ScrollableTabView from "react-native-scrollable-tab-view";
 import { apis, appConfig, colors } from "../../config";
 import request from "../../api";
@@ -9,38 +9,46 @@ import { get, save, mergeData } from "../../store";
 const { tabMenu, defaultIndex } = appConfig;
 
 export default class MainScreen extends React.Component {
-
-  activeIndex = defaultIndex
+  activeIndex = defaultIndex;
 
   get activeKey() {
     return this.state.tabMenu[this.activeIndex].key;
   }
 
   state = {
-    tabMenu
+    tabMenu,
+    isRefreshing: false
   };
 
-  fetch = (key) => {
-    key = key || this.activeKey
+  fetch = key => {
+    key = key || this.activeKey;
+    this.setState({ isRefreshing: true });
     request(apis[key]).then(data => {
       let tabMenu = produce(this.state.tabMenu, draft => {
-        let item = draft.find(item => item.key === key)
-        item.data = mergeData(item.data, data)
+        let item = draft.find(item => item.key === key);
+        item.data = mergeData(item.data, data);
       });
-      this.setState({ tabMenu });
-      save(key, tabMenu)
+      this.setState({ tabMenu, isRefreshing: false });
+      save(key, tabMenu);
     });
   };
 
   componentDidMount() {
     this.fetch();
     get(this.activeKey).then(data => {
-      this.setState(tabMenu, mergeData(data, this.state.tabMenu[this.activeKey].data))
-    })
+      this.setState(
+        tabMenu,
+        mergeData(data, this.state.tabMenu[this.activeKey].data)
+      );
+    });
   }
 
   onChangeTab = ({ i }) => {
-    this.activeIndex = i
+    this.activeIndex = i;
+    this.fetch();
+  };
+
+  _onRefresh = () => {
     this.fetch();
   };
 
@@ -74,14 +82,25 @@ export default class MainScreen extends React.Component {
             key={tab.label}
             tabLabel={tab.label}
             style={styles.tabView}
-          >
-            {tab.data.map(item => (
-              <Card
-                key={item.id}
-                {...item}
-                onPress={this.onPressCard.bind(null, item)}
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.isRefreshing}
+                onRefresh={this._onRefresh}
+                tintColor={colors.primaryBg}
+                colors={[colors.primaryBg]}
+                progressBackgroundColor="#fff"
               />
-            ))}
+            }
+          >
+            <View>
+              {tab.data.map(item => (
+                <Card
+                  key={item.id}
+                  {...item}
+                  onPress={this.onPressCard.bind(null, item)}
+                />
+              ))}
+            </View>
           </ScrollView>
         ))}
       </ScrollableTabView>
@@ -91,7 +110,7 @@ export default class MainScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 0,
+    paddingTop: 0
   },
   tabView: {
     flex: 1,
