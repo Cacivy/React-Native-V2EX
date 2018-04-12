@@ -1,6 +1,6 @@
 import React from "react";
 import { ScrollView, View, StyleSheet, RefreshControl } from "react-native";
-import ScrollableTabView from "react-native-scrollable-tab-view";
+import ScrollableTabView, {ScrollableTabBar} from "react-native-scrollable-tab-view";
 import { appConfig, colors } from "../../config";
 import { getTopicsByName } from "../../api";
 import produce from "immer";
@@ -25,7 +25,7 @@ export default class MainScreen extends React.Component {
     this.setState({ isRefreshing: true });
     getTopicsByName(key).then(data => {
       let tabMenu = produce(this.state.tabMenu, draft => {
-        let item = draft.find(item => item.key === key);
+        let item = draft.find(item => item.key.toString() === key.toString());
         item.data = mergeData(item.data, data);
       });
       this.setState({ tabMenu, isRefreshing: false });
@@ -81,6 +81,7 @@ export default class MainScreen extends React.Component {
         style={styles.container}
         initialPage={this.activeIndex}
         onChangeTab={this.onChangeTab}
+        renderTabBar={() => <ScrollableTabBar />}
       >
         {this.state.tabMenu.map(tab => (
           <ScrollView

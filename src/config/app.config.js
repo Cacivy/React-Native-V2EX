@@ -14,17 +14,42 @@ export default {
     },
     {
       label: "技术",
-      key: 'tech',
+      key: ['tech', 'programmer', 'cloud', 'linux', 'docker'],
       data: []
     },
     {
       label: "创意",
-      key: 'ideas',
+      key: ['ideas', 'create'],
+      data: []
+    },
+    {
+      label: "好玩",
+      key: ['taste', 'share'],
+      data: []
+    },
+    {
+      label: "APPLE",
+      key: ['macos', 'macmini', 'ipod', 'appletv', 'apple', 'ipad', 'iphone'],
       data: []
     },
     {
       label: "酷工作",
-      key: 'jobs',
+      key: ['jobs', 'cv', 'career', ''],
+      data: []
+    },
+    {
+      label: "交易",
+      key: ['all4all', 'free', 'deals'],
+      data: []
+    },
+    {
+      label: "城市",
+      key: ['beijing', 'hangzhou', 'lijiang', 'shanghai', 'shenzhen', 'life'],
+      data: []
+    },
+    {
+      label: "问与答",
+      key: 'qna',
       data: []
     }
   ]

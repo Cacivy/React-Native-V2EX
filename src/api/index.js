@@ -10,6 +10,17 @@ export const request = url => {
 }
 
 export const getTopicsByName = (name) => {
+  if (Array.isArray(name)) {
+    return new Promise((reslove, reject) => {
+      Promise.all(name.map(item => request(apis.topics + item)))
+      .then(data => {
+        let result = []
+        data.forEach(item => result = result.concat(item))
+        result.sort((a, b) => b.created - a.created)
+        reslove(result)
+      })
+    })  
+  }
   let url = apis[name] || (apis.topics + name)
   return request(url)
 }
