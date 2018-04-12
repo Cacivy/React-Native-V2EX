@@ -32,3 +32,8 @@ gradlew installRelease
 + styled-components
 + immer
 + timeago.js
+
+
+#### Question
+
+[滚动tab默认选中样式问题](https://github.com/skv-headless/react-native-scrollable-tab-view/issues/712)

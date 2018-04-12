@@ -79,7 +79,7 @@ const TitleText = styled.Text`
   font-weight: bold;
 `;
 
-export const Member = ({ member, node, created, onPressNodeTitle }) => (
+export const Member = ({ member = {}, node, created, onPressNodeTitle }) => (
   <MemberView>
     <AvatarImage source={{ uri: "https:" + member.avatar_normal }} />
     <ColView>

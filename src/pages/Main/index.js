@@ -83,7 +83,7 @@ export default class MainScreen extends React.PureComponent {
       <ScrollableTabView
         {...scrollViewProps}
         style={styles.container}
-        initialPage={this.activeIndex}
+        initialPage={defaultIndex}
         onChangeTab={this.onChangeTab}
         renderTabBar={() => <ScrollableTabBar />}
       >
@@ -92,6 +92,7 @@ export default class MainScreen extends React.PureComponent {
             key={tab.label}
             tabLabel={tab.label}
             style={styles.tabView}
+            removeClippedSubviews={true}
             refreshControl={
               <RefreshControl
                 refreshing={this.state.isRefreshing}
@@ -121,7 +122,7 @@ export default class MainScreen extends React.PureComponent {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 0
+    // paddingTop: 0
   },
   tabView: {
     flex: 1,
