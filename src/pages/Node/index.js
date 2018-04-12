@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { ScrollView, View, Text } from "react-native";
 import { getTopicsByName } from "../../api";
-import { Card } from "../../components";
+import { Card, getRefreshControl } from "../../components";
 
 class Node extends Component {
   static navigationOptions = ({ navigation }) => {
@@ -25,8 +25,7 @@ class Node extends Component {
   };
 
   componentDidMount() {
-    const { params } = this.props.navigation.state;
-    this.fetch(params.node.name);
+    this._onRefresh()
   }
 
   onPressCard = item => {
@@ -34,11 +33,20 @@ class Node extends Component {
     navigate("Detail", { item });
   };
 
+  _onRefresh = () => {
+    const { params } = this.props.navigation.state;
+    this.fetch(params.node.name);
+  }
+
   render() {
     const { params } = this.props.navigation.state;
     const node = params.node;
     return (
-      <ScrollView>
+      <ScrollView
+      refreshControl={
+        getRefreshControl(this.state.isRefreshing, this._onRefresh)
+      }
+      >
         {this.state.data.map(item => (
           <Card
             key={item.id}

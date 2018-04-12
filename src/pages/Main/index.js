@@ -1,12 +1,12 @@
 import React from "react";
-import { ScrollView, View, StyleSheet, RefreshControl } from "react-native";
+import { ScrollView, View, StyleSheet } from "react-native";
 import ScrollableTabView, {
   ScrollableTabBar
 } from "react-native-scrollable-tab-view";
 import { appConfig, colors } from "../../config";
 import { getTopicsByName } from "../../api";
 import produce from "immer";
-import { Card } from "../../components";
+import { Card, getRefreshControl } from "../../components";
 import { get, save, mergeData } from "../../store";
 const { tabMenu, defaultIndex } = appConfig;
 
@@ -94,13 +94,7 @@ export default class MainScreen extends React.PureComponent {
             style={styles.tabView}
             removeClippedSubviews={true}
             refreshControl={
-              <RefreshControl
-                refreshing={this.state.isRefreshing}
-                onRefresh={this._onRefresh}
-                tintColor={colors.primaryBg}
-                colors={[colors.primaryBg]}
-                progressBackgroundColor="#fff"
-              />
+              getRefreshControl(this.state.isRefreshing, this._onRefresh)
             }
           >
             <View>
