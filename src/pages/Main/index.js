@@ -1,6 +1,8 @@
 import React from "react";
 import { ScrollView, View, StyleSheet, RefreshControl } from "react-native";
-import ScrollableTabView, {ScrollableTabBar} from "react-native-scrollable-tab-view";
+import ScrollableTabView, {
+  ScrollableTabBar
+} from "react-native-scrollable-tab-view";
 import { appConfig, colors } from "../../config";
 import { getTopicsByName } from "../../api";
 import produce from "immer";
@@ -8,7 +10,7 @@ import { Card } from "../../components";
 import { get, save, mergeData } from "../../store";
 const { tabMenu, defaultIndex } = appConfig;
 
-export default class MainScreen extends React.Component {
+export default class MainScreen extends React.PureComponent {
   activeIndex = defaultIndex;
 
   get activeKey() {
@@ -45,7 +47,9 @@ export default class MainScreen extends React.Component {
 
   onChangeTab = ({ i }) => {
     this.activeIndex = i;
-    this.fetch();
+    if (!this.state.tabMenu[i].data.length) {
+      this.fetch();
+    }
   };
 
   _onRefresh = () => {
