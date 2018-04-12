@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, TouchableHighlight } from "react-native";
+import { View, Text, Image, TouchableHighlight, Linking } from "react-native";
 import styled from "styled-components";
 import timeago from "timeago.js";
 
@@ -84,10 +84,20 @@ export const Member = ({ member = {}, node, created, onPressNodeTitle }) => (
     <AvatarImage source={{ uri: "https:" + member.avatar_normal }} />
     <ColView>
       <Text>
-        <NameText>{member.username}</NameText>
+        <NameText
+          onPress={() => {
+            Linking.openURL(
+              "https://www.v2ex.com/member/" + member.username
+            ).catch(err => console.error("An error occurred", err));
+          }}
+        >
+          {member.username}
+        </NameText>
         {node && (
-          <NodeTitleText onPress={onPressNodeTitle && onPressNodeTitle.bind(null, node)}>
-            &nbsp;{node.title}
+          <NodeTitleText
+            onPress={onPressNodeTitle && onPressNodeTitle.bind(null, node)}
+          >
+            &nbsp;&nbsp;{node.title}
           </NodeTitleText>
         )}
       </Text>
