@@ -4,7 +4,7 @@ import styled from "styled-components";
 import timeago from "timeago.js";
 
 export const ContainerView = styled.View`
-  border-width: ${props => (props.showBorder ? 1 : 0)};
+  border-width: ${props => (props.hideBorder ? 0 : 1)};
   background-color: #fff;
   border-color: "rgba(0,0,0,0.1)";
   height: auto;
@@ -105,7 +105,7 @@ const Card = ({
   created,
   onPress,
   onPressNodeTitle,
-  showBorder = true
+  hideBorder = false
 }) => {
   const Header = (
     <HeaderView>
@@ -124,7 +124,7 @@ const Card = ({
   );
   return (
     <TouchableHighlight onPress={onPress}>
-      <ContainerView showBorder={showBorder}>
+      <ContainerView hideBorder={hideBorder}>
         {Header}
         <TitleView>
           <TitleText>{title}</TitleText>

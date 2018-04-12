@@ -64,14 +64,24 @@ class Detail extends Component {
           />
         }
       >
-        <Card {...item} showBorder={false} onPressNodeTitle={this.onPressNodeTitle} />
+        <Card
+          {...item}
+          hideBorder={true}
+          onPressNodeTitle={this.onPressNodeTitle}
+        />
         <ContentView>
           <Text>{item.content}</Text>
         </ContentView>
         <View>
-          {this.state.replies.map((reply, index) => (
-            <Reply key={reply.id} reply={reply} index={1 + index} />
-          ))}
+          {this.state.replies.length ? (
+            this.state.replies.map((reply, index) => (
+              <Reply key={reply.id} reply={reply} index={1 + index} />
+            ))
+          ) : (
+            <ContainerView>
+              <Text>目前没有回复</Text>
+            </ContainerView>
+          )}
         </View>
       </ScrollView>
     );
