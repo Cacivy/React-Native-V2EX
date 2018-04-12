@@ -4,7 +4,7 @@ import ScrollableTabView from "react-native-scrollable-tab-view";
 import { appConfig, colors } from "../../config";
 import { getTopicsByName } from "../../api";
 import produce from "immer";
-import Card from "./Card";
+import { Card } from "../../components";
 import { get, save, mergeData } from "../../store";
 const { tabMenu, defaultIndex } = appConfig;
 
@@ -57,6 +57,11 @@ export default class MainScreen extends React.Component {
     navigate("Detail", { item });
   };
 
+  onPressNodeTitle = node => {
+    const { navigate } = this.props.navigation;
+    navigate("Node", { node });
+  };
+
   render() {
     const scrollViewProps = {
       tabBarPosition: "top",
@@ -98,6 +103,7 @@ export default class MainScreen extends React.Component {
                   key={item.id}
                   {...item}
                   onPress={this.onPressCard.bind(null, item)}
+                  onPressNodeTitle={this.onPressNodeTitle}
                 />
               ))}
             </View>

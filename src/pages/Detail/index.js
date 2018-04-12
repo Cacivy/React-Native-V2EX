@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, ScrollView, RefreshControl } from "react-native";
 import styled from "styled-components";
-import Card, { ContainerView } from "../Main/Card";
+import { Card, ContainerView } from "../../components";
 import Reply from "./Reply";
 import { colors } from "../../config";
 import { getRepliesByTopicId } from "../../api";
@@ -44,6 +44,11 @@ class Detail extends Component {
     this.fetch(item.id);
   };
 
+  onPressNodeTitle = node => {
+    const { navigate } = this.props.navigation;
+    navigate("Node", { node });
+  };
+
   render() {
     const { params } = this.props.navigation.state;
     const item = params.item;
@@ -59,7 +64,7 @@ class Detail extends Component {
           />
         }
       >
-        <Card {...item} showBorder={false} />
+        <Card {...item} showBorder={false} onPressNodeTitle={this.onPressNodeTitle} />
         <ContentView>
           <Text>{item.content}</Text>
         </ContentView>

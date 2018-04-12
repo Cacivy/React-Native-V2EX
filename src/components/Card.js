@@ -72,20 +72,24 @@ const IConText = styled.Text`
 
 const TitleView = styled.View`
   flex: 1;
-`
+`;
 
 const TitleText = styled.Text`
   font-size: 16;
   font-weight: bold;
 `;
 
-export const Member = ({ member, node, created }) => (
+export const Member = ({ member, node, created, onPressNodeTitle }) => (
   <MemberView>
     <AvatarImage source={{ uri: "https:" + member.avatar_normal }} />
     <ColView>
       <Text>
         <NameText>{member.username}</NameText>
-        {node && <NodeTitleText>&nbsp;{node.title}</NodeTitleText>}
+        {node && (
+          <NodeTitleText onPress={onPressNodeTitle && onPressNodeTitle.bind(null, node)}>
+            &nbsp;{node.title}
+          </NodeTitleText>
+        )}
       </Text>
       <TimeText>{timeago(null, "zh_CN").format(created * 1000)}</TimeText>
     </ColView>
@@ -100,11 +104,17 @@ const Card = ({
   replies,
   created,
   onPress,
+  onPressNodeTitle,
   showBorder = true
 }) => {
   const Header = (
     <HeaderView>
-      <Member member={member} node={node} created={created} />
+      <Member
+        member={member}
+        node={node}
+        created={created}
+        onPressNodeTitle={onPressNodeTitle}
+      />
       {replies > 0 && (
         <View>
           <IConText>{replies}</IConText>

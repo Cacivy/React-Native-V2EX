@@ -9,8 +9,9 @@ export const request = url => {
   });
 }
 
-export const getTopicsByName = (key) => {
-  return request(apis[key])
+export const getTopicsByName = (name) => {
+  let url = apis[name] || (apis.topics + name)
+  return request(url)
 }
 
 export const getRepliesByTopicId = (id) => {
