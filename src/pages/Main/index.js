@@ -1,8 +1,8 @@
 import React from "react";
 import { ScrollView, View, StyleSheet, RefreshControl } from "react-native";
 import ScrollableTabView from "react-native-scrollable-tab-view";
-import { apis, appConfig, colors } from "../../config";
-import request from "../../api";
+import { appConfig, colors } from "../../config";
+import { getTopicsByName } from "../../api";
 import produce from "immer";
 import Card from "./Card";
 import { get, save, mergeData } from "../../store";
@@ -23,7 +23,7 @@ export default class MainScreen extends React.Component {
   fetch = key => {
     key = key || this.activeKey;
     this.setState({ isRefreshing: true });
-    request(apis[key]).then(data => {
+    getTopicsByName(key).then(data => {
       let tabMenu = produce(this.state.tabMenu, draft => {
         let item = draft.find(item => item.key === key);
         item.data = mergeData(item.data, data);

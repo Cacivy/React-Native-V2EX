@@ -3,8 +3,8 @@ import { View, Text, ScrollView, RefreshControl } from "react-native";
 import styled from "styled-components";
 import Card, { ContainerView } from "../Main/Card";
 import Reply from "./Reply";
-import { apis, colors } from "../../config";
-import request from "../../api";
+import { colors } from "../../config";
+import { getRepliesByTopicId } from "../../api";
 import produce from "immer";
 
 const ContentView = ContainerView.extend`
@@ -29,7 +29,7 @@ class Detail extends Component {
 
   fetch = id => {
     this.setState({ isRefreshing: true });
-    request(apis.replies + id).then(data => {
+    getRepliesByTopicId(id).then(data => {
       this.setState({ replies: data, isRefreshing: false });
     });
   };
