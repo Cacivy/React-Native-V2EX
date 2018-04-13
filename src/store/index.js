@@ -1,20 +1,23 @@
-import Store from 'react-native-store';
+import { AsyncStorage } from 'react-native';
 import { appConfig } from '../config'
 
-const DB = {}
+// const DB = {}
 
-appConfig.tabMenu.forEach(({key}) => {
-  DB[key] = Store.model(key)
-})
+// appConfig.tabMenu.forEach(({key}) => {
+//   let k = key.toString()
+//   DB[k] = Store.model(k)
+// })
 
 export const get = (key, value) => {
-  return DB[key].find() || []
+  return AsyncStorage.getItem(key)
+}
+
+export const multiGet = (keys) => {
+  return multiGet(keys)
 }
 
 export const save = (key, data) => {
-  DB[key].remove().then(() => {
-    DB[key].add(data)
-  })
+  return AsyncStorage.setItem(key, JSON.stringify(data))
 }
 
 export const mergeData = (a, b) => {
@@ -22,5 +25,5 @@ export const mergeData = (a, b) => {
   if (result.length > 100) {
     result.splice(100) 
   }
-  return result
+  return result.sort((a, b) => b.created - a.created)
 }

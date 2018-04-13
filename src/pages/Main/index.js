@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, View, StyleSheet } from "react-native";
+import { ScrollView, View, StyleSheet, ToastAndroid } from "react-native";
 import ScrollableTabView, {
   ScrollableTabBar
 } from "react-native-scrollable-tab-view";
@@ -7,7 +7,7 @@ import { appConfig, colors } from "../../config";
 import { getTopicsByName } from "../../api";
 import produce from "immer";
 import { Card, getRefreshControl } from "../../components";
-import { get, save, mergeData } from "../../store";
+import { get, save, multiGet, mergeData } from "../../store";
 const { tabMenu, defaultIndex } = appConfig;
 
 export default class MainScreen extends React.PureComponent {
@@ -29,27 +29,31 @@ export default class MainScreen extends React.PureComponent {
       let tabMenu = produce(this.state.tabMenu, draft => {
         let item = draft.find(item => item.key.toString() === key.toString());
         item.data = mergeData(item.data, data);
+        save(key.toString(), item.data)
       });
       this.setState({ tabMenu, isRefreshing: false });
-      save(key, tabMenu);
     });
   };
 
   componentDidMount() {
     this.fetch();
-    get(this.activeKey).then(data => {
-      this.setState(
-        tabMenu,
-        mergeData(data, this.state.tabMenu[this.activeKey].data)
-      );
-    });
+
+    let tabMenu = this.state.tabMenu.slice()
+    let promises = tabMenu.map(({key}) => get(key.toString()))
+    Promise.all(promises).then(data => {
+      data.forEach((item, index) => {
+        tabMenu[index].data = item ? JSON.parse(item) : []
+      })
+      this.setState({ tabMenu });
+      
+    })
   }
 
   onChangeTab = ({ i }) => {
     this.activeIndex = i;
-    if (!this.state.tabMenu[i].data.length) {
-      this.fetch();
-    }
+    // if (!this.state.tabMenu[i].data.length) {
+    this.fetch();
+    // }
   };
 
   _onRefresh = () => {
@@ -93,9 +97,10 @@ export default class MainScreen extends React.PureComponent {
             tabLabel={tab.label}
             style={styles.tabView}
             removeClippedSubviews={true}
-            refreshControl={
-              getRefreshControl(this.state.isRefreshing, this._onRefresh)
-            }
+            refreshControl={getRefreshControl(
+              this.state.isRefreshing,
+              this._onRefresh
+            )}
           >
             <View>
               {tab.data.map(item => (

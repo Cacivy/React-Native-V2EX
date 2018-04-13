@@ -28,7 +28,7 @@ gradlew installRelease
 
 + [v2ex api](https://github.com/djyde/V2EX-API) fetch
 + 路由 react-navigation
-+ 本地存储 [react-native-store](https://github.com/thewei/react-native-store/)
++ 本地存储 AsyncStorage
 + styled-components
 + immer
 + timeago.js

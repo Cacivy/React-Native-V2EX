@@ -3614,10 +3614,6 @@ react-native-scrollable-tab-view@^0.8.0:
     prop-types "^15.6.0"
     react-timer-mixin "^0.13.3"
 
-react-native-store@^0.4.1:
-  version "0.4.1"
-  resolved "http://registry.npm.taobao.org/react-native-store/download/react-native-store-0.4.1.tgz#dc0c61021b9b033ae3c06660ec1985771aa4300c"
-
 "react-native-tab-view@github:react-navigation/react-native-tab-view":
   version "0.0.74"
   resolved "https://codeload.github.com/react-navigation/react-native-tab-view/tar.gz/36ebd834d78b841fc19778c966465d02fd1213bb"
