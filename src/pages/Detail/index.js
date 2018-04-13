@@ -73,7 +73,9 @@ class Detail extends Component {
             ))
           ) : (
             <ContainerView>
-              <Text>目前没有回复</Text>
+              <Text>{
+                this.state.isRefreshing ? '拼命获取回复中...' : '目前还没有回复...'
+              }</Text>
             </ContainerView>
           )}
         </View>
