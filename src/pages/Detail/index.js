@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, ScrollView, RefreshControl } from "react-native";
 import styled from "styled-components";
-import { Card, ContainerView } from "../../components";
+import { Card, ContainerView, getRefreshControl } from "../../components";
 import Reply from "./Reply";
 import { colors } from "../../config";
 import { getRepliesByTopicId } from "../../api";
@@ -55,23 +55,29 @@ class Detail extends Component {
     return (
       <ScrollView
         refreshControl={
-          <RefreshControl
-            refreshing={this.state.isRefreshing}
-            onRefresh={this._onRefresh}
-            tintColor={colors.primaryBg}
-            colors={[colors.primaryBg]}
-            progressBackgroundColor="#fff"
-          />
+          getRefreshControl(this.state.isRefreshing, this._onRefresh)
         }
       >
-        <Card {...item} showBorder={false} onPressNodeTitle={this.onPressNodeTitle} />
+        <Card
+          {...item}
+          hideBorder={true}
+          onPressNodeTitle={this.onPressNodeTitle}
+        />
         <ContentView>
           <Text>{item.content}</Text>
         </ContentView>
         <View>
-          {this.state.replies.map((reply, index) => (
-            <Reply key={reply.id} reply={reply} index={1 + index} />
-          ))}
+          {this.state.replies.length ? (
+            this.state.replies.map((reply, index) => (
+              <Reply key={reply.id} reply={reply} index={1 + index} />
+            ))
+          ) : (
+            <ContainerView>
+              <Text>{
+                this.state.isRefreshing ? '拼命获取回复中...' : '目前还没有回复...'
+              }</Text>
+            </ContainerView>
+          )}
         </View>
       </ScrollView>
     );

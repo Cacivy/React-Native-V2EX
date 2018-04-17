@@ -1,14 +1,16 @@
 import React from "react";
-import { ScrollView, View, StyleSheet, RefreshControl } from "react-native";
-import ScrollableTabView, {ScrollableTabBar} from "react-native-scrollable-tab-view";
+import { ScrollView, View, StyleSheet, ToastAndroid } from "react-native";
+import ScrollableTabView, {
+  ScrollableTabBar
+} from "react-native-scrollable-tab-view";
 import { appConfig, colors } from "../../config";
 import { getTopicsByName } from "../../api";
 import produce from "immer";
-import { Card } from "../../components";
-import { get, save, mergeData } from "../../store";
+import { Card, getRefreshControl } from "../../components";
+import { get, save, multiGet, mergeData } from "../../store";
 const { tabMenu, defaultIndex } = appConfig;
 
-export default class MainScreen extends React.Component {
+export default class MainScreen extends React.PureComponent {
   activeIndex = defaultIndex;
 
   get activeKey() {
@@ -27,25 +29,31 @@ export default class MainScreen extends React.Component {
       let tabMenu = produce(this.state.tabMenu, draft => {
         let item = draft.find(item => item.key.toString() === key.toString());
         item.data = mergeData(item.data, data);
+        save(key.toString(), item.data)
       });
       this.setState({ tabMenu, isRefreshing: false });
-      save(key, tabMenu);
     });
   };
 
   componentDidMount() {
     this.fetch();
-    get(this.activeKey).then(data => {
-      this.setState(
-        tabMenu,
-        mergeData(data, this.state.tabMenu[this.activeKey].data)
-      );
-    });
+
+    let tabMenu = this.state.tabMenu.slice()
+    let promises = tabMenu.map(({key}) => get(key.toString()))
+    Promise.all(promises).then(data => {
+      data.forEach((item, index) => {
+        tabMenu[index].data = item ? JSON.parse(item) : []
+      })
+      this.setState({ tabMenu });
+      
+    })
   }
 
   onChangeTab = ({ i }) => {
     this.activeIndex = i;
+    // if (!this.state.tabMenu[i].data.length) {
     this.fetch();
+    // }
   };
 
   _onRefresh = () => {
@@ -79,7 +87,7 @@ export default class MainScreen extends React.Component {
       <ScrollableTabView
         {...scrollViewProps}
         style={styles.container}
-        initialPage={this.activeIndex}
+        initialPage={defaultIndex}
         onChangeTab={this.onChangeTab}
         renderTabBar={() => <ScrollableTabBar />}
       >
@@ -88,15 +96,11 @@ export default class MainScreen extends React.Component {
             key={tab.label}
             tabLabel={tab.label}
             style={styles.tabView}
-            refreshControl={
-              <RefreshControl
-                refreshing={this.state.isRefreshing}
-                onRefresh={this._onRefresh}
-                tintColor={colors.primaryBg}
-                colors={[colors.primaryBg]}
-                progressBackgroundColor="#fff"
-              />
-            }
+            removeClippedSubviews={true}
+            refreshControl={getRefreshControl(
+              this.state.isRefreshing,
+              this._onRefresh
+            )}
           >
             <View>
               {tab.data.map(item => (
@@ -117,7 +121,7 @@ export default class MainScreen extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 0
+    // paddingTop: 0
   },
   tabView: {
     flex: 1,

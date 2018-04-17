@@ -1,10 +1,10 @@
 import React from "react";
-import { View, Text, Image, TouchableHighlight } from "react-native";
+import { View, Text, Image, TouchableHighlight, Linking } from "react-native";
 import styled from "styled-components";
 import timeago from "timeago.js";
 
 export const ContainerView = styled.View`
-  border-width: ${props => (props.showBorder ? 1 : 0)};
+  border-width: ${props => (props.hideBorder ? 0 : 1)};
   background-color: #fff;
   border-color: "rgba(0,0,0,0.1)";
   height: auto;
@@ -79,15 +79,25 @@ const TitleText = styled.Text`
   font-weight: bold;
 `;
 
-export const Member = ({ member, node, created, onPressNodeTitle }) => (
+export const Member = ({ member = {}, node, created, onPressNodeTitle }) => (
   <MemberView>
     <AvatarImage source={{ uri: "https:" + member.avatar_normal }} />
     <ColView>
       <Text>
-        <NameText>{member.username}</NameText>
+        <NameText
+          onPress={() => {
+            Linking.openURL(
+              "https://www.v2ex.com/member/" + member.username
+            ).catch(err => console.error("An error occurred", err));
+          }}
+        >
+          {member.username}
+        </NameText>
         {node && (
-          <NodeTitleText onPress={onPressNodeTitle && onPressNodeTitle.bind(null, node)}>
-            &nbsp;{node.title}
+          <NodeTitleText
+            onPress={onPressNodeTitle && onPressNodeTitle.bind(null, node)}
+          >
+            &nbsp;&nbsp;{node.title}
           </NodeTitleText>
         )}
       </Text>
@@ -105,7 +115,7 @@ const Card = ({
   created,
   onPress,
   onPressNodeTitle,
-  showBorder = true
+  hideBorder = false
 }) => {
   const Header = (
     <HeaderView>
@@ -124,7 +134,7 @@ const Card = ({
   );
   return (
     <TouchableHighlight onPress={onPress}>
-      <ContainerView showBorder={showBorder}>
+      <ContainerView hideBorder={hideBorder}>
         {Header}
         <TitleView>
           <TitleText>{title}</TitleText>

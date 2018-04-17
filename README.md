@@ -28,7 +28,12 @@ gradlew installRelease
 
 + [v2ex api](https://github.com/djyde/V2EX-API) fetch
 + 路由 react-navigation
-+ 本地存储 [react-native-store](https://github.com/thewei/react-native-store/)
++ 本地存储 AsyncStorage
 + styled-components
 + immer
 + timeago.js
+
+
+#### Question
+
+[滚动tab默认选中样式问题](https://github.com/skv-headless/react-native-scrollable-tab-view/issues/712)

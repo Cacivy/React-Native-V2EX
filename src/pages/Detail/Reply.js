@@ -5,7 +5,7 @@ import styled from "styled-components";
 
 const Reply = ({ reply, index }) => {
   return (
-    <ContainerView showBorder={true}>
+    <ContainerView>
       <HeaderView>
         <Member member={reply.member} created={reply.created} />
         <View>
